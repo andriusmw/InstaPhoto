@@ -1,13 +1,13 @@
 <script setup>
+import Nav from "./components/Nav.vue"
 
 </script>
 
 <template>
   
-<main>
-  <button>Button</button>
-  <a-button type="primary">Button</a-button>
-</main>
+    <main>
+        <Nav />
+    </main>
 
 </template>
 
