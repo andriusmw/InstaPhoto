@@ -9,7 +9,14 @@ import UserBar from "./UserBar.vue";
     <Container>
 
      <div class="profile-container">
-            <UserBar />
+            <UserBar 
+                username="laithhard"
+                :userInfo="{
+                    posts:4,
+                    followers: 100,
+                    following: 342
+                }"
+            />
             <h2>ImageGallery</h2>
      </div>
     </Container>
