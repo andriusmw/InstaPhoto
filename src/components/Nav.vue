@@ -5,6 +5,7 @@ import {ref} from "vue"
 import AuthModal from "./AuthModal.vue"
 
 const searchUsername = ref("")
+const isAuthenticated = ref(false)
 
 const onSearch = () => {
 
@@ -24,11 +25,17 @@ const onSearch = () => {
                         @search="onSearch"
                 />
                </div>
-              <div class="right-content">
-                   <a-button type="primary">Signup</a-button>
-                 <!--  <a-button type="primary">Log in</a-button> -->
-                 <AuthModal />
+              <div class="right-content" v-if="!isAuthenticated">
+                     <AuthModal :isLogin="false"/>
+                     <AuthModal :isLogin="true"/>
             </div>
+
+               <div class="right-content" v-else>
+                   <a-button type="primary">Profile</a-button>
+                   <a-button type="primary">Logout</a-button>
+            </div>
+
+
             </div>
         </Container>
     </a-layout-header>
