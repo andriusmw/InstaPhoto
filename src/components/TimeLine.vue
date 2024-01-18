@@ -7,7 +7,7 @@ const data = [
         id:1,
         username: "selena",
         url: "https://www.hola.com/fashion/imagenes/tendencias/2024011376690/selena-gomez-look-traje-premios-afi/0-365-477/selena-e.jpg",
-        caption: "hi"
+        caption: "hello Papi"
    },
     {
          id:2,
