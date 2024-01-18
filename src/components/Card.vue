@@ -1,10 +1,17 @@
+<script setup>
+import {defineProps} from "vue"
+
+
+const props = defineProps(['post'])
+</script>
+
 <template>
     <a-card hoverable style="width: 240px" class="card">
         <template #cover>
-            <img alt="example" src="">
+            <img alt="example" :src="post.url">
         </template>
-        <a-card-meta title="insta Title">
-            <template #description>insta descr</template>
+        <a-card-meta :title="post.name">
+            <template #description>{{post.caption}}</template>
         </a-card-meta>
     </a-card>
 </template>
