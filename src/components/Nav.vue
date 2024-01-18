@@ -2,7 +2,7 @@
 import {RouterLink} from "vue-router"
 import Container from "./Container.vue"
 import {ref} from "vue"
-
+import AuthModal from "./AuthModal.vue"
 
 const searchUsername = ref("")
 
@@ -26,7 +26,8 @@ const onSearch = () => {
                </div>
               <div class="right-content">
                    <a-button type="primary">Signup</a-button>
-               <a-button type="primary">Log in</a-button>
+                 <!--  <a-button type="primary">Log in</a-button> -->
+                 <AuthModal />
             </div>
             </div>
         </Container>
