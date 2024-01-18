@@ -1,6 +1,6 @@
 <script setup>
 import Container from "./Container.vue";
-
+import UserBar from "./UserBar.vue";
 
 
 </script>
@@ -9,7 +9,7 @@ import Container from "./Container.vue";
     <Container>
 
      <div class="profile-container">
-            <h1>Userbar</h1>
+            <UserBar />
             <h2>ImageGallery</h2>
      </div>
     </Container>
