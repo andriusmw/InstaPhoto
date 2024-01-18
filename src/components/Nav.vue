@@ -1,15 +1,33 @@
+<script setup>
+import {RouterLink} from "vue-router"
+import Container from "./Container.vue"
+import {ref} from "vue"
+
+
+const searchUsername = ref("")
+
+const onSearch = () => {
+
+}
+</script>
+
 <template>
     <a-layout-header>
-        <div class="logo"></div>
-        <a-menu
-            v-model:selectedKeys="selectedKeys"
-            theme="dark"
-            mode="horizontal"
-            :style="{lineHeight: '64px'}"
-        >
-            <a-menu-item key="1">nav 1</a-menu-item>
-            <a-menu-item key="2">nav 2</a-menu-item>
-            <a-menu-item key="3">nav 3</a-menu-item>
-        </a-menu>
+        <Container>
+             <RouterLink to="/">Instagram</RouterLink>
+             <a-input-search 
+                v-model:value="searchUsername"
+                placeholder="username..."
+                style="width: 200px"
+                @search="onSearch"
+             />
+        </Container>
     </a-layout-header>
 </template>
+
+
+<style scoped>
+header.ant-layout-header {
+    background-color: black;
+}
+</style>
