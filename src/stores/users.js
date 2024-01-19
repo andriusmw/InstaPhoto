@@ -32,7 +32,7 @@ export const useUserStore = defineStore('users', () => {
       return errorMessage.value = "You must provide a valid email address"
     }
 
-
+    errorMessage.value = ""
 
   }
 
