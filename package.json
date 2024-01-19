@@ -12,6 +12,7 @@
     "test:e2e:dev": "start-server-and-test 'vite dev --port 4173' http://localhost:4173 'cypress open --e2e'"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.39.3",
     "ant-design-vue": "^4.1.1",
     "pinia": "^2.1.7",
     "vue": "^3.3.11",

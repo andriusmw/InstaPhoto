@@ -10,7 +10,7 @@ const props = defineProps(['post'])
         <template #cover>
             <img alt="example" :src="post.url">
         </template>
-        <a-card-meta :title="post.name">
+        <a-card-meta :title="post.username">
             <template #description>{{post.caption}}</template>
         </a-card-meta>
     </a-card>
