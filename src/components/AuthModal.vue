@@ -3,10 +3,12 @@ import {ref, defineProps, reactive} from "vue";
 
 //import the userStore from Pinia (hook)
 import {useUserStore} from "../stores/users"
+import {storeToRefs} from "pinia"
+
 //declare a const userStore to use all the functions inside the hook useUserStore()
 const userStore = useUserStore()
 // de-structuring errorMessage and handleSingup from the hook to use them
-const {errorMessage, handleSingup} = userStore
+const {errorMessage} = storeToRefs(userStore)
 
 
 const props = defineProps(['isLogin'])
@@ -27,7 +29,7 @@ const showModal = () => {
 
 //this is called when we click the "ok" button
 const handleOk = (e) => {
-   handleSingup(userCredentials)
+   userStore.handleSingup(userCredentials)
 };
 
 const title = props.isLogin ? 'Login' : 'Sign Up' 
@@ -37,9 +39,10 @@ const title = props.isLogin ? 'Login' : 'Sign Up'
     <div>
         <a-button type="primary" @click="showModal" class="btn">{{title}}</a-button>
         <a-modal v-model:visible="visible" :title="title" @ok="handleOk">
-           <a-input- class="input" v-if="!isLogin" v-model:value="userCredentials.username" placeholder="Username"/>
+           <a-input class="input" v-if="!isLogin" v-model:value="userCredentials.username" placeholder="Username"/>
            <a-input  class="input" v-model:value="userCredentials.email" placeholder="Email"></a-input>
-           <a-input  class="input" v-model:value="userCredentials.password" placeholder="Password"></a-input>
+           <a-input  class="input" v-model:value="userCredentials.password" placeholder="Password" type="password"></a-input>
+            <a-typography-text v-if="errorMessage" type="danger">{{errorMessage}}</a-typography-text>
         </a-modal>
     </div>
     

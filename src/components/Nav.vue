@@ -7,6 +7,7 @@ import AuthModal from "./AuthModal.vue"
 const router = useRouter()
 const searchUsername = ref("")
 const isAuthenticated = ref(false)
+//isAuthenticated affects the buttons we see on navbar
 
 const onSearch = () => {
     if(searchUsername.value) {
