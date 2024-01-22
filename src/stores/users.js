@@ -39,12 +39,19 @@ export const useUserStore = defineStore('users', () => {
     // VALIDATE IF USER EXISTS OR NOT //
 
     //Trying to signup on supabase
-    const response =  await supabase.auth.signUp({
+    const {error} =  await supabase.auth.signUp({
       email,
       password
     })
-
-    console.log({response})
+    
+    if (error){
+      return errorMessage.value = error.message
+    }
+    //console.log({response})
+    await supabase.from("users").insert({
+      username,
+      email
+    })
 
   }
 
