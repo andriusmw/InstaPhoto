@@ -1,3 +1,6 @@
+<!-- ------------------------------------ IMPORTS ---------------------------------------------------
+---------------------------------------------------------------------------------------------------- -->
+
 <script setup>
 import {RouterLink, useRouter} from "vue-router"
 import Container from "./Container.vue"
@@ -6,13 +9,17 @@ import AuthModal from "./AuthModal.vue"
 import {useUserStore} from "../stores/users"
 import { storeToRefs } from 'pinia';
 
+// ------------------------------------- CONSTS ---------------------------------------------
+// ------------------------------------------------------------------------------------------
+
 const userStore = useUserStore()
 
 const { user, loadingUser} = storeToRefs(userStore)
 const router = useRouter()
 const searchUsername = ref("")
 
-
+// ------------------------------------- FUNCTIONS ------------------------------------------
+// ------------------------------------------------------------------------------------------
 const onSearch = () => {
     if(searchUsername.value) {
         router.push(`/profile/${searchUsername.value}`);
@@ -24,12 +31,20 @@ const handleLogout = async () => {
     await userStore.handleLogout()
 }
 
+const goToUsersProfile = () => {
+    router.push(`/profile/${user.value.username}`)
+
+
+}
+// ------------------------------------- TEMPLATE ------------------------------------------
+// -----------------------------------------------------------------------------------------
+
 </script>
 
 <template>
     <a-layout-header>
         <Container>
-              {{user}}
+           <!--   {{user}} to check if we get user -->
             <div class="nav-container">
                <div class="left-content">
                  <RouterLink to="/">Instagram</RouterLink>
@@ -47,7 +62,7 @@ const handleLogout = async () => {
                  </div>
  
                   <div class="right-content" v-else>
-                      <a-button type="primary">Profile</a-button>
+                      <a-button type="primary" @click="goToUsersProfile()">Profile</a-button>
                       <a-button type="primary" @click="handleLogout()" >Logout</a-button>
                  </div>
              </div>
@@ -58,6 +73,8 @@ const handleLogout = async () => {
     </a-layout-header>
 </template>
 
+<!-- ----------------------------------------- STYLES --------------------------------------------------
+------------------------------------------------------------------------------------------------------- -->
 
 <style scoped>
 header.ant-layout-header {
