@@ -8,7 +8,7 @@ import {storeToRefs} from "pinia"
 //declare a const userStore to use all the functions inside the hook useUserStore()
 const userStore = useUserStore()
 // de-structuring errorMessage and handleSingup from the hook to use them
-const {errorMessage} = storeToRefs(userStore)
+const {errorMessage, loading} = storeToRefs(userStore)
 
 
 const props = defineProps(['isLogin'])
@@ -52,10 +52,14 @@ const title = props.isLogin ? 'Login' : 'Sign Up'
             <a-button key="submit" type="primary" :loading="loading" @click="handleOk">Submit</a-button>
 
           </template>
-        
-           <a-input class="input" v-if="!isLogin" v-model:value="userCredentials.username" placeholder="Username"/>
-           <a-input  class="input" v-model:value="userCredentials.email" placeholder="Email"></a-input>
-           <a-input  class="input" v-model:value="userCredentials.password" placeholder="Password" type="password"></a-input>
+            <div v-if="!loading" class="input-container">
+                 <a-input class="input" v-if="!isLogin" v-model:value="userCredentials.username" placeholder="Username"/>
+                 <a-input  class="input" v-model:value="userCredentials.email" placeholder="Email"></a-input>
+                 <a-input  class="input" v-model:value="userCredentials.password" placeholder="Password" type="password"></a-input>
+            </div>
+            <div v-else class="spinner">
+                <a-spin></a-spin>
+            </div>
             <a-typography-text v-if="errorMessage" type="danger">{{errorMessage}}</a-typography-text>
         </a-modal>
     </div>
