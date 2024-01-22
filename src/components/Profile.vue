@@ -10,6 +10,7 @@ import ImageGallery from "./imageGallery.vue"
 
      <div class="profile-container">
             <UserBar 
+            :key="$route.params.username"
                 username="laithhard"
                 :userInfo="{
                     posts:4,
