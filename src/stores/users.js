@@ -1,8 +1,13 @@
+// --------------------------------------- IMPORTS --------------------------------------
+// --------------------------------------------------------------------------------------
+
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { supabase } from '../../supabase';
 
 export const useUserStore = defineStore('users', () => {
+  // ------------------------------------CONSTS AND DEFINITIONS ----------------------------------
+  //----------------------------------------------------------------------------------------------
   const user = ref(null);
   const errorMessage = ref("")
   const loading = ref(false)
@@ -15,7 +20,52 @@ export const useUserStore = defineStore('users', () => {
       );
   };
 
-  const handleLogin = () => {}
+  // ----------------------------------------- HANDLE LOGIN ------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------
+
+  const handleLogin = async () => {
+
+    const {email, password} = credentials
+    
+    // validates email and password
+    if(!validateEmail(email)) {
+      return errorMessage.value ="Email is invalid"
+    }
+
+      
+    if(!password.length) {
+      return errorMessage.value ="Password cannot be empty"
+    }
+
+    loading.value = true; // sets spinner to true while doing other functions
+    
+    //tries to log in using supabase's login method
+    const {error, data} = await supabase.auth.signInWithPassword({
+      email,
+      password
+    })
+    if(error){
+      loading.value = false;
+      return errorMessage.value = error.message
+    }
+    // Makes a select to the database to check for the logued user
+    const {data: existingUser} = await 
+    supabase.from("users").select()
+      .eq('email', email)
+      .single()
+      //Now send that data to the user state value
+    user.value = {
+      email: existingUser.email,
+      username: existingUser.username,
+      id: existingUser.id
+
+    }   //  after that, it clears the spinner and the error messages
+    loading.value = false;
+    errorMessage.value = ""
+  }
+
+  // ------------------------------------- HANDLE SIGN UP --------------------------------------------------
+  //--------------------------------------------------------------------------------------------------------
 
   const handleSingup = async (credentials) => {
     const {email, password, username} = credentials;
@@ -88,6 +138,8 @@ export const useUserStore = defineStore('users', () => {
 
   }
 
+  // ---------------------------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------------------------
    
 
   const handleLogout = () => {}

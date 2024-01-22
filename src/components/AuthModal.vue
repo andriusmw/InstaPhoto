@@ -36,7 +36,17 @@ const clearUserCredentialsInput = () => {
 
 //this is called when we click the "ok" button
 const handleOk = async (e) => {
-  await  userStore.handleSingup(userCredentials);
+    if(props.isLogin){
+          await  userStore.handleLogin({
+            password: userCredentials.password,
+            email: userCredentials.email
+          });
+
+    } else {
+         await  userStore.handleSingup(userCredentials);
+    }
+
+
    if(user.value) {
      clearUserCredentialsInput()
      visible.value = false;
