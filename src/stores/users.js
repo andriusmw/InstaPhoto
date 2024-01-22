@@ -144,7 +144,34 @@ export const useUserStore = defineStore('users', () => {
 
   const handleLogout = () => {}
 
-  const getUser = () => {}
+  const getUser = async () => {
+   
+    try { 
+      loading.value = true;
+      const {data}  = await supabase.auth.getUser();
+    // we call the getUser() Method from supabase
+    // we store de-structur the data property and send it to userWithMail
+    // to make another call to supabase to check for the logged user
+    const {data: userWithEmail} = await supabase
+       .from("users")
+       .select()
+        .eq("email", data.user.email) // data from getUser
+        .single()
+
+        // we update the user state value with the response of the previous call
+        user.value = {
+          username: userWithEmail.username,
+          email: userWithEmail.email,
+          id: userWithEmail.id
+        }
+        loading.value = false
+      }
+    catch {
+      loading.value = false
+      console.log("error on getUser")
+    }
+   
+  }
 
   const clearErrorMessage = () => {
     errorMessage.value = ""

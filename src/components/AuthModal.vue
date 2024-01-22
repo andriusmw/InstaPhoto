@@ -25,6 +25,7 @@ const userCredentials = reactive({
 
 const showModal = () => {
     visible.value = true;
+  
 };
 
 const clearUserCredentialsInput = () => {
