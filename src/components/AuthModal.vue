@@ -8,7 +8,7 @@ import {storeToRefs} from "pinia"
 //declare a const userStore to use all the functions inside the hook useUserStore()
 const userStore = useUserStore()
 // de-structuring errorMessage and handleSingup from the hook to use them
-const {errorMessage, loading} = storeToRefs(userStore)
+const {errorMessage, loading, user} = storeToRefs(userStore)
 
 
 const props = defineProps(['isLogin'])
@@ -27,14 +27,25 @@ const showModal = () => {
     visible.value = true;
 };
 
+const clearUserCredentialsInput = () => {
+    userCredentials.email = "";
+    userCredentials.password = "";
+    userCredentials.username= "";
+    userStore.clearErrorMessage()
+}
+
 //this is called when we click the "ok" button
-const handleOk = (e) => {
-   userStore.handleSingup(userCredentials)
+const handleOk = async (e) => {
+  await  userStore.handleSingup(userCredentials);
+   if(user.value) {
+     clearUserCredentialsInput()
+     visible.value = false;
+   }
 };
 
 //this is called when we click the "Cancel" button
 const handleCancel = () => {
-   userStore.clearErrorMessage()
+    clearUserCredentialsInput()
    visible.value = false
 };
 

@@ -20,7 +20,7 @@ export const useUserStore = defineStore('users', () => {
   const handleSingup = async (credentials) => {
     const {email, password, username} = credentials;
 
-    //First validation step
+    //1-First validation step
     if(password.length < 6) {
       //console.log("password too short")
       return errorMessage.value = "Password must have 6 or more characters"
@@ -50,7 +50,7 @@ export const useUserStore = defineStore('users', () => {
       
     errorMessage.value = ""
 
-    //Trying to signup on supabase
+    //2-Calls for thr auth method of supabase
     const {error} =  await supabase.auth.signUp({
       email,
       password
@@ -61,10 +61,28 @@ export const useUserStore = defineStore('users', () => {
       return errorMessage.value = error.message
     }
     //console.log({response})
+
+    //3- this makes a SQL Insert query on suapabse's databse with 
+    // the data of the form
     await supabase.from("users").insert({
       username,
       email
     })
+
+    //4-this makes a SQL select on the supabase databse to check for the user
+    // with the same emial as registered.
+    const {data: newUser} = await 
+    supabase.from("users").select()
+      .eq('email', email)
+      .single()
+    //console.log(newUser)
+
+    // 5-Updating the user state value
+    user.value = {
+      id: newUser.id,
+      email: newUser.email,
+      username: newUser.username
+    }
 
     loading.value = false;
 
@@ -83,6 +101,7 @@ export const useUserStore = defineStore('users', () => {
   return { user, 
     errorMessage,
     loading,
+    user,
       handleLogin, 
       handleSingup,
        handleLogout, 
