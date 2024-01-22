@@ -49,7 +49,7 @@ const title = props.isLogin ? 'Login' : 'Sign Up'
          
           <template #footer>
             <a-button key="back" @click="handleCancel">Cancel</a-button>
-            <a-button key="submit" type="primary" :loading="loading" @click="handleOk">Submit</a-button>
+            <a-button :disabled="loading" key="submit" type="primary" :loading="loading" @click="handleOk">Submit</a-button>
 
           </template>
             <div v-if="!loading" class="input-container">
@@ -76,4 +76,15 @@ const title = props.isLogin ? 'Login' : 'Sign Up'
     margin-top: 5px;
 }
 
+.input-container {
+    height: 120px;
+
+}
+
+.spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+}
 </style>
