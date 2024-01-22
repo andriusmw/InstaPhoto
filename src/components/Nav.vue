@@ -11,8 +11,7 @@ const userStore = useUserStore()
 const { user, loadingUser} = storeToRefs(userStore)
 const router = useRouter()
 const searchUsername = ref("")
-//const isAuthenticated = ref(false)
-//isAuthenticated affects the buttons we see on navbar
+
 
 const onSearch = () => {
     if(searchUsername.value) {
@@ -20,6 +19,11 @@ const onSearch = () => {
         searchUsername.value = ""
     }
 }
+
+const handleLogout = async () => {
+    await userStore.handleLogout()
+}
+
 </script>
 
 <template>
@@ -44,7 +48,7 @@ const onSearch = () => {
  
                   <div class="right-content" v-else>
                       <a-button type="primary">Profile</a-button>
-                      <a-button type="primary">Logout</a-button>
+                      <a-button type="primary" @click="handleLogout()" >Logout</a-button>
                  </div>
              </div>
 
