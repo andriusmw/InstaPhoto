@@ -148,14 +148,16 @@ export const useUserStore = defineStore('users', () => {
    
     try { 
       loading.value = true;
-      const {data}  = await supabase.auth.getUser();
-    // we call the getUser() Method from supabase
+      const {data}  = await supabase.auth.getSession();
+      //console.log(data)
+
+    // we call the getUser()/getSession() Method from supabase
     // we store de-structur the data property and send it to userWithMail
     // to make another call to supabase to check for the logged user
     const {data: userWithEmail} = await supabase
        .from("users")
        .select()
-        .eq("email", data.user.email) // data from getUser
+        .eq("email", data.session.user.email) // data from getUser
         .single()
 
         // we update the user state value with the response of the previous call
