@@ -66,7 +66,7 @@ const title = props.isLogin ? 'Login' : 'Sign Up'
 
 <template>
     <div>
-        {{user}}
+      
         <a-button type="primary" @click="showModal" class="btn">{{title}}</a-button>
         <a-modal v-model:visible="visible" :title="title" @ok="handleOk">
          

@@ -11,6 +11,7 @@ export const useUserStore = defineStore('users', () => {
   const user = ref(null);
   const errorMessage = ref("")
   const loading = ref(false)
+  const loadingUser = ref(false)
 
   const validateEmail = (email) => {
     return String(email)
@@ -152,6 +153,7 @@ export const useUserStore = defineStore('users', () => {
    
     try { 
       loading.value = true;
+      loadingUser.value = true;
       const {data}  = await supabase.auth.getSession();
       //console.log(data)
 
@@ -161,7 +163,7 @@ export const useUserStore = defineStore('users', () => {
     const {data: userWithEmail} = await supabase
        .from("users")
        .select()
-        .eq("email", data.session.user.email) // data from getUser
+        .eq("email", data.session.user.email) // data from getSession
         .single()
 
         // we update the user state value with the response of the previous call
@@ -171,9 +173,11 @@ export const useUserStore = defineStore('users', () => {
           id: userWithEmail.id
         }
         loading.value = false
+        loadingUser.value = false;
       }
     catch {
       loading.value = false
+      loadingUser.value = false;
       console.log("error on getUser")
     }
    
@@ -190,6 +194,7 @@ export const useUserStore = defineStore('users', () => {
   return { user, 
     errorMessage,
     loading,
+    loadingUser,
     user,
       handleLogin, 
       handleSingup,
