@@ -1,5 +1,6 @@
 <script setup>
 import {defineProps} from "vue"
+import UploadPhotoModal from "./UploadPhotoModal.vue"
 
 const props = defineProps(['username', 'userInfo'])
 
@@ -11,6 +12,7 @@ const props = defineProps(['username', 'userInfo'])
             <a-typography-title :level="2">
                 {{props.username}}
             </a-typography-title>
+            <UploadPhotoModal />
         </div>
         <div class="bottom-content">
             <a-typography-title :level="5">{{props.userInfo.posts}} posts</a-typography-title>
@@ -39,6 +41,12 @@ const props = defineProps(['username', 'userInfo'])
         padding: 0;
         margin-right: 30px !important;
         
+    }
+
+    .top-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
 </style>
