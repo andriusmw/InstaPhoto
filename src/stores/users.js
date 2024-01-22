@@ -23,7 +23,7 @@ export const useUserStore = defineStore('users', () => {
   // ----------------------------------------- HANDLE LOGIN ------------------------------------------------
   // -------------------------------------------------------------------------------------------------------
 
-  const handleLogin = async () => {
+  const handleLogin = async (credentials) => {
 
     const {email, password} = credentials
     
