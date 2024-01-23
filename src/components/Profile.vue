@@ -6,7 +6,7 @@ import Container from "./Container.vue";
 import UserBar from "./UserBar.vue";
 import ImageGallery from "./imageGallery.vue"
 import {useRoute} from "vue-router"
-import {ref, onMounted, watch} from "vue"
+import {ref, onMounted, watch, reactive} from "vue"
 import {supabase} from "../../supabase"
 import {useUserStore} from "../stores/users"
 import { storeToRefs } from "pinia";
@@ -21,6 +21,11 @@ const posts = ref([])
 const user = ref(null)
 const loading = ref(false)
 const isFollowing = ref(false)
+const userInfo = reactive({
+       posts: null,
+       followers: null,
+       following: null
+})
 
 // ----------------------------------- FUNCTIONS ----------------------------------------
 // --------------------------------------------------------------------------------------
@@ -54,11 +59,39 @@ const fetchData = async() => {
     //  Now it makes a fetch from the posts of the user with that id
        const {data: postsData} = await supabase
         .from("posts").select().eq("owner_id", user.value.id)
-
+    // Here we are doing functions we need to be done automatically when data is fetched
       posts.value = postsData
       await fetchIsFollowing()
+      //relevant info for user info
+      const followerCount = await fetchFollowersCount()
+      const followingCount = await fetchFollowingCount()
+      userInfo.followers = followerCount;
+      userInfo.following = followingCount;
+      userInfo.posts = posts.value.length
       loading.value = false
 }
+
+// -----------------------------------------------------
+// To see how much followers i have
+const fetchFollowersCount = async() => {
+  const {count} = await supabase.from("followers_following")
+    .select("*", {count: 'exact'}).eq("following_id", user.value.id);
+
+    return count
+}
+
+// -----------------------------------------------------
+// To see how much following i have
+const fetchFollowingCount = async() => {
+  const {count} = await supabase.from("followers_following")
+    .select("*", {count: 'exact'}).eq("follower_id", user.value.id);
+
+    return count
+
+}
+
+
+
 //-----------------------------------------------------------
 watch(loggedInUser, () => {
     fetchIsFollowing()
@@ -97,11 +130,7 @@ const fetchIsFollowing = async () => {
             <UserBar 
             :key="$route.params.username"
                 :user="user"
-                :userInfo="{
-                    posts:4,
-                    followers: 100,
-                    following: 342
-                }"
+                :userInfo="userInfo"
                 :addNewPost="addNewPost"
                 :isFollowing="isFollowing"
                 :updateIsFollowing="updateIsFollowing"
