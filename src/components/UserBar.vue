@@ -34,10 +34,13 @@ console.log(profileUsername)
                 {{props.user.username}}
             </a-typography-title>
             <!-- check if username from params is equal to user name from hook -->
-            <UploadPhotoModal 
-                v-if="user && profileUsername === user.username"
+            <div v-if="user">
+                  <UploadPhotoModal 
+                v-if="profileUsername === user.username"
                 :addNewPost="addNewPost"
                  />
+                 <a-button v-else>Follow</a-button>
+            </div>
         </div>
         <div class="bottom-content">
             <a-typography-title :level="5">{{props.userInfo.posts}} posts</a-typography-title>
@@ -45,7 +48,7 @@ console.log(profileUsername)
             <a-typography-title :level="5">{{props.userInfo.following}} following</a-typography-title>
           </div>
     </div>
-    
+
     <div class="userbar-container" v-else>
         <div class="top-content">
             <a-typography-title :level="2">
