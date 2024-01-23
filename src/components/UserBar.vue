@@ -15,7 +15,7 @@ const route = useRoute();
 const userStore = useUserStore();
 const {user} = storeToRefs(userStore)
 const {username: profileUsername} = route.params
-const props = defineProps(['username', 'userInfo'])
+const props = defineProps(['username', 'userInfo', 'addNewPost'])
 
 // --------------------------------FUNCTIONS -------------------------
 console.log(user)
@@ -33,7 +33,10 @@ console.log(profileUsername)
             <a-typography-title :level="2">
                 {{props.username}}
             </a-typography-title>
-            <UploadPhotoModal v-if="user && profileUsername === user.username" />
+            <UploadPhotoModal 
+                v-if="user && profileUsername === user.username"
+                :addNewPost="addNewPost"
+                 />
         </div>
         <div class="bottom-content">
             <a-typography-title :level="5">{{props.userInfo.posts}} posts</a-typography-title>

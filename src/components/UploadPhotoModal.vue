@@ -2,8 +2,8 @@
 ---------------------------------------------------------------------------------------------- -->
 
 <script setup>
+   import { ref, defineProps } from 'vue';
    import { storeToRefs } from 'pinia';
-   import { ref } from 'vue';
    import {supabase} from "../../supabase"
    import {useUserStore} from "../stores/users"
 
@@ -11,6 +11,7 @@
 // ------------------------------------------------------------------------------------------------- 
     const userStore = useUserStore()
     const {user} = storeToRefs(userStore)
+    const props = defineProps(['addNewPost'])
     const loading = ref(false);
     const errorMessage = ref("")
     const visible = ref(false);
@@ -28,6 +29,8 @@
         loading.value = true; // set spinner to true
         const fileName = Math.floor(Math.random() * 100000000000000000) 
         // file works with the type of input
+        let filePath
+        let fileCaption
       if(file.value){
       const {data, error} =  await supabase.storage.from("images").upload('public/' + fileName, file.value)
        // console.log(data)
@@ -35,12 +38,15 @@
              loading.value = false;
             return errorMessage.value = "Unable to upload image"
         }
-        // if there is no error we have a response with data so the code continues
-        // here and we upload an object with the url, caption & owner_id
-        await supabase.from("posts").insert({
+       filePath = data.path
+       fileCaption = caption.value
+       // we are storing the url and the caption on those lets to use them later
+       // on a function to show them on the profile
+       await supabase.from("posts").insert({
                 url: data.path,
                 caption: caption.value,
                 owner_id: user.value.id
+                //this makes the insert into de the DB
          })
      
       }
@@ -48,6 +54,12 @@
         loading.value = false;
         visible.value = false;
         caption.value = "";
+        // this function comes from Profile > UserBar throught props drilling
+        props.addNewPost({
+                url: filePath,
+                caption: fileCaption,
+              
+        })
     };
 
 //---------------------------------------------------------------
