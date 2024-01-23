@@ -3,11 +3,13 @@
 
 <script setup>
    import { ref } from 'vue';
+   import {supabase} from "../../supabase"
 
 // ----------------------------CONSTS ------------------------
 // ---------------------------------------------------------- 
     const visible = ref(false);
     const caption = ref("");
+    const file = ref(null)
 
 // --------------------------- FUNCTIONS -------------------
 // ---------------------------------------------------------
@@ -16,9 +18,12 @@
         visible.value = true;
     };
 
-    const handleOk = (e) => {
-        console.log(e);
-        visible.value = false;
+    const handleOk = async () => {
+        const fileName = Math.floor(Math.random() * 100000000000000000)
+      if(file.value){
+      const response =  await supabase.storage.from("images").upload('public/' + fileName, file.value)
+        console.log(response)
+      }
     };
 
     const handleUploadChange = (e) => {
