@@ -31,6 +31,12 @@ const addNewPost = (post) => {
 
 // ----------------------------------------------
 
+const updateIsFollowing = (follow) => {
+    isFollowing.value = follow
+}
+
+// ----------------------------------------------
+
 const fetchData = async() => {
     loading.value = true
     // gets the user data from the user with the same username as in our route.params
@@ -98,6 +104,7 @@ const fetchIsFollowing = async () => {
                 }"
                 :addNewPost="addNewPost"
                 :isFollowing="isFollowing"
+                :updateIsFollowing="updateIsFollowing"
             />
             <ImageGallery 
                 :posts="posts"

@@ -16,24 +16,27 @@ const route = useRoute();
 const userStore = useUserStore();
 const {user} = storeToRefs(userStore)
 const {username: profileUsername} = route.params
-const props = defineProps(['user', 'userInfo', 'addNewPost', 'isFollowing'])
+const props = defineProps(['user', 'userInfo', 'addNewPost', 'isFollowing', 'updateIsFollowing'])
 
 // --------------------------------FUNCTIONS -------------------------
 // ----------------------------------------------------------------------------
 
 const followUser = async () => {
-    await supabase .from("followers_following").insert({
+   await  supabase .from("followers_following").insert({
         follower_id: user.value.id,
         following_id: props.user.id
     })
+    props.updateIsFollowing(true)
 }
 
 // ---------------------------------------------------
 
 const unfollowUser = async () => {
-    await supabase .from("followers_following").delete()
+  await supabase .from("followers_following").delete()
         .eq("follower_id", user.value.id )
         .eq("following_id", props.user.id)
+
+       props.updateIsFollowing(false)   
 }
 
 
