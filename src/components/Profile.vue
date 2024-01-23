@@ -57,7 +57,7 @@ onMounted( ()=> {
       
             <UserBar 
             :key="$route.params.username"
-                username="laithhard"
+                :user="user"
                 :userInfo="{
                     posts:4,
                     followers: 100,
