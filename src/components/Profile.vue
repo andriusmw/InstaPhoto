@@ -6,17 +6,21 @@ import Container from "./Container.vue";
 import UserBar from "./UserBar.vue";
 import ImageGallery from "./imageGallery.vue"
 import {useRoute} from "vue-router"
-import {ref, onMounted} from "vue"
+import {ref, onMounted, watch} from "vue"
 import {supabase} from "../../supabase"
+import {useUserStore} from "../stores/users"
+import { storeToRefs } from "pinia";
 
 // ------------------------------------ CONSTS -------------------------------------------
 // --------------------------------------------------------------------------------------
-
+const userStore = useUserStore()
 const route = useRoute()
 const {username} = route.params
+const {user: loggedInUser} = storeToRefs(userStore)
 const posts = ref([])
 const user = ref(null)
 const loading = ref(false)
+const isFollowing = ref(false)
 
 // ----------------------------------- FUNCTIONS ----------------------------------------
 // --------------------------------------------------------------------------------------
@@ -46,13 +50,33 @@ const fetchData = async() => {
         .from("posts").select().eq("owner_id", user.value.id)
 
       posts.value = postsData
+      await fetchIsFollowing()
       loading.value = false
 }
 //-----------------------------------------------------------
+watch(loggedInUser, () => {
+    fetchIsFollowing()
+
+})
+
+// ------------------------------------------------------
 onMounted( ()=> {
     fetchData()
 }
 )
+
+//---------------------------------------------------------
+const fetchIsFollowing = async () => {
+    if(loggedInUser.value && (loggedInUser.value.id !== user.value.id ) ) {
+        const {data}= await supabase.from("followers_following")
+        .select().eq("follower_id", loggedInUser.value.id )
+            .eq("following_id", user.value.id )
+            .single()
+
+        if(data) return  isFollowing.value = true
+    }
+    
+}
 
 </script>
 
@@ -73,6 +97,7 @@ onMounted( ()=> {
                     following: 342
                 }"
                 :addNewPost="addNewPost"
+                :isFollowing="isFollowing"
             />
             <ImageGallery 
                 :posts="posts"
