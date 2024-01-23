@@ -25,8 +25,9 @@
     };
 //----------------------------------------------------------
     const handleOk = async () => {
-        loading.value = true;
-        const fileName = Math.floor(Math.random() * 100000000000000000)
+        loading.value = true; // set spinner to true
+        const fileName = Math.floor(Math.random() * 100000000000000000) 
+        // file works with the type of input
       if(file.value){
       const {data, error} =  await supabase.storage.from("images").upload('public/' + fileName, file.value)
        // console.log(data)
@@ -34,6 +35,8 @@
              loading.value = false;
             return errorMessage.value = "Unable to upload image"
         }
+        // if there is no error we have a response with data so the code continues
+        // here and we upload an object with the url, caption & owner_id
         await supabase.from("posts").insert({
                 url: data.path,
                 caption: caption.value,
@@ -41,7 +44,10 @@
          })
      
       }
+      // now time to clean states
         loading.value = false;
+        visible.value = false;
+        caption.value = "";
     };
 
 //---------------------------------------------------------------
@@ -74,6 +80,7 @@
                     :maxLength="50"
                   >
                  </a-input>
+                  <a-typography-text v-if="errorMessage" type="danger">{{errorMessage}}</a-typography-text>
            </div>
            <div v-else class="spinner">
                 <a-spin></a-spin>
