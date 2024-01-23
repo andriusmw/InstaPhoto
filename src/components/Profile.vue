@@ -16,6 +16,7 @@ const route = useRoute()
 const {username} = route.params
 const posts = ref([])
 const user = ref(null)
+const loading = ref(false)
 
 // ----------------------------------- FUNCTIONS ----------------------------------------
 // --------------------------------------------------------------------------------------
@@ -24,20 +25,28 @@ const addNewPost = (post) => {
     posts.value.unshift(post)
 }
 
+// ----------------------------------------------
+
 const fetchData = async() => {
+    loading.value = true
     // gets the user data from the user with the same username as in our route.params
     const {data: userData} = await 
         supabase.from("users").select().eq('username', username).single()
 
-    if(userData){
+        if(!userData) {
+              loading.value = false
+              return user.value = null
+        }
+   
         user.value = userData 
         //Stores the data in our user ref state
-    }
+   
     //  Now it makes a fetch from the posts of the user with that id
-    const {data: postsData} = await supabase
+       const {data: postsData} = await supabase
         .from("posts").select().eq("owner_id", user.value.id)
 
-    posts.value = postsData
+      posts.value = postsData
+      loading.value = false
 }
 //-----------------------------------------------------------
 onMounted( ()=> {
@@ -53,7 +62,7 @@ onMounted( ()=> {
 <template>
     <Container>
 
-     <div class="profile-container">
+     <div class="profile-container" v-if="!loading">
       
             <UserBar 
             :key="$route.params.username"
@@ -69,6 +78,9 @@ onMounted( ()=> {
                 :posts="posts"
             />
      </div>
+     <div v-else class="spinner">
+        <a-spin></a-spin>
+     </div>
     </Container>
 </template>
 
@@ -82,6 +94,13 @@ onMounted( ()=> {
         flex-direction: column;
         align-items: center;
         padding: 20px 0;
+    }
+
+    .spinner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 85vh;
     }
 
 </style>
