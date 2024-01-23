@@ -2,11 +2,15 @@
 ------------------------------------------------------------------- -->
 
 <script setup>
-   import { ref } from 'vue';
+   import { storeToRefs } from 'pinia';
+import { ref } from 'vue';
    import {supabase} from "../../supabase"
+   import {useUserStore} from "../stores/users"
 
 // ----------------------------CONSTS ------------------------
 // ---------------------------------------------------------- 
+    const userStore = useUserStore()
+    const {user} = storeToRefs(userStore)
     const visible = ref(false);
     const caption = ref("");
     const file = ref(null)
@@ -21,8 +25,15 @@
     const handleOk = async () => {
         const fileName = Math.floor(Math.random() * 100000000000000000)
       if(file.value){
-      const response =  await supabase.storage.from("images").upload('public/' + fileName, file.value)
-        console.log(response)
+      const {data, error} =  await supabase.storage.from("images").upload('public/' + fileName, file.value)
+       // console.log(data)
+         if(data) {
+            await supabase.from("posts").insert({
+                url: data.path,
+                caption: caption.value,
+                owner_id: user.value.id
+            })
+         }
       }
     };
 
