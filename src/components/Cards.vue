@@ -6,6 +6,7 @@ import {supabase} from "../../supabase"
 import {useUserStore} from "../stores/users"
 import { storeToRefs } from "pinia"
 import {onMounted, ref} from "vue"
+import Observer from "./Observer.vue"
 
 //------------------------------------------ CONSTS ------------------------------------------
 // -------------------------------------------------------------------------------------------
@@ -38,6 +39,13 @@ const fetchData = async () => {
 
 //-------------------------------------------------
 
+const fetchNextSect = () => {
+    
+}
+
+
+//-------------------------------------------------
+
 onMounted(() => {
     fetchData()
 })
@@ -50,6 +58,7 @@ onMounted(() => {
 <template>
      <div class="timeline-container">
                  <Card v-for="post in posts" :key="post.id" :post="post" />
+                 <Observer v-if="posts.length" @intersect="fetchNextSect" />
     </div>
 
 
