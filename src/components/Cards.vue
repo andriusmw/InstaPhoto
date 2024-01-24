@@ -30,7 +30,9 @@ const fetchData = async () => {
 
     //gets all the posts from those owner_ids (which are the ones we are folling)
     const {data } = await supabase.from("posts")
-        .select().in('owner_id', [owner_ids]) 
+        .select().in('owner_id', [owner_ids])
+            .order("created_at", {ascending: false})
+
          posts.value = data
 }
 

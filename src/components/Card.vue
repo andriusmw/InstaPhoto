@@ -21,4 +21,8 @@ const props = defineProps(['post'])
     margin-bottom: 20px;
 }
 
+.card img {
+    height: 270px;
+}
+
 </style>
