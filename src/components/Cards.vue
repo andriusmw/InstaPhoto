@@ -14,7 +14,9 @@ import Observer from "./Observer.vue"
 const userStore = useUserStore()
 const {user} = storeToRefs(userStore)
 const posts = ref([])
-
+const lastCardIndex = ref(2)
+const ownerIds = ref([])
+const reachEnd = ref(false)
 
 
 // -------------------------------------------------FUNCTIONS ------------------------------------
@@ -27,19 +29,35 @@ const fetchData = async () => {
 
     // turns the array of objects that is followings into an array of numbers 
     //where each number is a following_id
-    const owner_ids = followings.map(f => f.following_id)    
+    ownerIds.value = followings.map(f => f.following_id)    
 
     //gets all the posts from those owner_ids (which are the ones we are folling)
     const {data } = await supabase.from("posts")
-        .select().in('owner_id', [owner_ids])
-            .order("created_at", {ascending: false})
+        .select().in('owner_id', ownerIds.value)
+        .range(0,lastCardIndex.value)
+        .order("created_at", {ascending: false})
 
          posts.value = data
 }
 
 //-------------------------------------------------
 
-const fetchNextSect = () => {
+const fetchNextSect = async () => {
+   // console.log("enters fetchNextSect")
+    if(!reachEnd.value) {
+         const {data } = await supabase.from("posts")
+        .select().in('owner_id', ownerIds.value)
+        .range(lastCardIndex.value + 1,lastCardIndex.value + 3)
+        .order("created_at", {ascending: false})
+
+        posts.value =[...posts.value,...data]
+
+        lastCardIndex.value = lastCardIndex.value + 3
+
+        if(!data.length) {
+            reachEnd.value = true
+        }
+    }
     
 }
 

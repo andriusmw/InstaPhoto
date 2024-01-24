@@ -8,11 +8,14 @@ const root = ref(null)
 const emits = defineEmits(["intersect"])
 
 onMounted(() => {
-    observer.value = new IntersectionObserver((entry) => {
+   // console.log("inside onMounted observer")
+    observer.value = new IntersectionObserver(([entry]) => {
        if(entry && entry.isIntersecting){
             emits("intersect")
+            //console.log("inside if on onMounted -> observer")
        }
     })
+    observer.value.observe(root.value)
 })
 
 </script>
@@ -30,5 +33,6 @@ onMounted(() => {
     .observer {
         height: 30px;
         width: 30px;
+      
     }
 </style>
