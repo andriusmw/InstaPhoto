@@ -37,7 +37,7 @@
                 console.error("Error fetching user data:", error.message);
             } else {
                 const username = data[0]?.username;
-                console.log("Username:", username);
+                // console.log("Username:", username);
                  userName.value = username
                 
             }

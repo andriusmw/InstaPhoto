@@ -9,12 +9,14 @@ const {VITE_BASE_PHOTO_URL} = import.meta.env
 
 <template>
     <div class="image-gallery-container">
-        <img 
-        v-for="post in props.posts" 
-        :key="post.id" 
-        :src="`${VITE_BASE_PHOTO_URL}${post.url}`" 
-        alt=""
-        >
+        <router-link v-for="post in props.posts"  :key="post.id" 
+            :to="{name: 'PostDetail', params: {postId: post.id}}" >
+                  <img 
+                    :src="`${VITE_BASE_PHOTO_URL}${post.url}`" 
+                     alt=""
+                    >
+        </router-link>
+      
     </div>
 </template>
 
