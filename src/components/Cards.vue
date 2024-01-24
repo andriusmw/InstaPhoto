@@ -1,5 +1,13 @@
 <script setup>
 import Card from "./Card.vue"
+import {supabase} from "../../supabase"
+import {useUserStore} from "../stores/users"
+import { storeToRefs } from "pinia"
+import {onMounted} from "vue"
+
+
+const userStore = useUserStore()
+const {user} = storeToRefs(userStore)
 
 const data = [
     {
@@ -23,6 +31,21 @@ const data = [
 
 
 ]
+
+// -------------------------------------------------FUNCTIONS ------------------------------------
+// -----------------------------------------------------------------------------------------------
+
+const fetchData = async () => {
+    // this gets the ids of the people we are following
+    const response = await supabase.from("followers_following")
+        .select("following_id").eq("follower_id", user.value.id)
+}
+
+//-------------------------------------------------
+
+onMounted(() => {
+    fetchData()
+})
 
 </script>
 
