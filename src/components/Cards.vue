@@ -50,6 +50,8 @@ const fetchNextSect = async () => {
         .range(lastCardIndex.value + 1,lastCardIndex.value + 3)
         .order("created_at", {ascending: false})
 
+        console.log(data)
+
         posts.value =[...posts.value,...data]
 
         lastCardIndex.value = lastCardIndex.value + 3

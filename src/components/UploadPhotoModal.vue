@@ -17,13 +17,37 @@
     const visible = ref(false);
     const caption = ref("");
     const file = ref(null)
+    const userName = ref("")
 
 // ------------------------------------------- FUNCTIONS ----------------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
-    const showModal = () => {
+    const showModal = async () => {
         visible.value = true;
-    };
+
+     
+    if (user && user.value && user.value.id) {
+        try {
+            const { data, error } = await supabase
+                .from("users")
+                .select("username")
+                .eq('id', user.value.id);
+
+            if (error) {
+                console.error("Error fetching user data:", error.message);
+            } else {
+                const username = data[0]?.username;
+                console.log("Username:", username);
+                 userName.value = username
+                
+            }
+        } catch (error) {
+            console.error("Error:", error.message);
+        }
+    } else {
+        console.log("No user state or user ID");
+    }
+};
 //----------------------------------------------------------
     const handleOk = async () => {
         loading.value = true; // set spinner to true
@@ -45,7 +69,8 @@
        await supabase.from("posts").insert({
                 url: data.path,
                 caption: caption.value,
-                owner_id: user.value.id
+                owner_id: user.value.id,
+                username: userName.value
                 //this makes the insert into de the DB
          })
      
@@ -70,6 +95,9 @@
             file.value = e.target.files[0]
         }
     }
+
+//-------------------------------------------------
+
 
 
 </script>
