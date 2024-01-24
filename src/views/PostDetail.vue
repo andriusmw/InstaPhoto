@@ -110,8 +110,8 @@ onMounted(async () => {
 
     .post-detail img {
         padding: 5px;
-        width: 70%;
-        height: 100%;
+        max-width: 70vw;
+        height: 90vh;
     }
 
      .right {

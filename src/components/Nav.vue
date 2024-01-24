@@ -47,7 +47,7 @@ const goToUsersProfile = () => {
            <!--   {{user}} to check if we get user -->
             <div class="nav-container">
                <div class="left-content">
-                 <RouterLink to="/">Instagram</RouterLink>
+                 <RouterLink to="/">InstaPhoto</RouterLink>
                 <a-input-search 
                         v-model:value="searchUsername"
                         placeholder="username..."
