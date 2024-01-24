@@ -1,3 +1,6 @@
+<!-- ---------------------------------- IMPORTS ------------------------------------
+----------------------------------------------------------------------------------- -->
+
 <script setup>
 import { ref, onMounted} from 'vue';
 import { supabase } from '../../supabase';
@@ -15,7 +18,10 @@ const post = ref(null);
 const {VITE_BASE_PHOTO_URL} = import.meta.env
 const isOwner = ref(false)
 
-// Comprobar si el owner_id del post es igual al id del usuario actual
+//------------------------------------- FUNCTIONS --------------------------------------------
+// ------------------------------------------------------------------------------------------ -->
+
+// Check if the owner is the same as loggedInUser
 const CheckOwner = (() => {
     if(post){
         if (post.value.owner_id === loggedInUser.value.id) {
@@ -31,13 +37,14 @@ const CheckOwner = (() => {
    
 });
 
-// Función para borrar el post
+//-------------------------------------------------------
+
 const deletePost = async () => {
   if (post.value) {
-    // Realizar la lógica para borrar el post en Supabase
+    // deleting on supabase
     await supabase.from('posts').delete().eq('id', post.value.id);
 
-    // Redirigir a una página de inicio o a donde desees después de borrar el post
+    // redirect after deleting
     router.push('/');
   }
 };
@@ -64,16 +71,24 @@ onMounted(async () => {
 });
 </script>
 
+<!-- ------------------------------------ TEMPLATE -------------------------------------------
+--------------------------------------------------------------------------------------------- -->
+
 <template>
   <div class="post-detail">
-    <h2>Details of the post</h2>
-    <div v-if="post">
+    
+    <div v-if="post" class="post">
       
       <img :src="`${VITE_BASE_PHOTO_URL}${post.url}`" alt="Post Image" />
-      <p>{{ post.username }}</p>
-        <p>{{post.caption}}</p>
-        <!-- Mostrar el botón de borrar solo si el owner_id es igual al id del usuario actual -->
-      <button v-if="isOwner" @click="deletePost">Borrar Post</button>
+
+      <div class="right">
+        <button v-if="isOwner" @click="deletePost">Borrar Post</button>
+         <h2>Details of the post</h2>
+          <h2>Made by: {{ post.username }}</h2>
+          <p>Description: {{post.caption}}</p>
+       
+      </div>
+  
     </div>
     <div v-else>
       <p>Loading details...</p>
@@ -84,5 +99,35 @@ onMounted(async () => {
 
 
 <style scoped>
+
+    .post-detail {
+       margin-left: 5vw;
+       margin-top: 5vh;
+        width: 90vw;
+        height: 90vh;
+
+    }
+
+    .post-detail img {
+        padding: 5px;
+        width: 70%;
+        height: 100%;
+    }
+
+     .right {
+        float: right;
+        padding-left: 10px;
+    }
+
+    .post {
+        display: flex;
+        justify-content: center;
+        border: 2px solid lightblue;
+        
+
+    }
+  
+
+
 
 </style>
